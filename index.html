@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Scene HUE System</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style type="text/css">
+        #alert {
+            margin-top: 10px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button [id="up_*"] {
+            margin-bottom: 10px;
+        }
+    </style>
+  </head>
+  <body>
+    <header class="text-center">
+        <h1>Scene HUE System</h1>
+    </header>
+    <section class="container" id="connectSection">
+        <div class="row">
+            <div class="col-md">
+            </div>
+            <div class="col col-md-6 text-center">
+                <p>Press your bridge link button before connect.</p>
+                <div class="form-group">
+                    <label for="ip">IP address</label>
+                    <input class="form-control" type="text" name="ip" id="ip" placeholder="192.168.x.xxx" onkeydown="if (event.keyCode == 13) {connectMyBridge()}" autofocus>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="connectMyBridge()">Connect</button>
+                <div id="alert" class="alert alert-danger" role="alert" style="display: none;"></div>
+            </div>
+            <div class="col-md">
+            </div>
+        </div>
+    </section>
+    <section id="uploadSection" style="display: none;">
+        <div class="row">
+            <div class="col-md">
+            </div>
+            <div class="col col-md-6 text-center">
+                <div class="form-group">
+                    <label for="lightSelect">Lights ID to include for the scene</label>
+                    <select class="form-control" multiple id="lightSelect"> <!-- label+checkbox system -->
+                        <option value="1" selected>1</option>
+                        <option value="2" selected>2</option>
+                        <option value="3" selected>3</option>
+                    </select>
+                </div>
+                <p>Choose the scene to upload to your bridge.</p>
+                <div id="alert" class="alert alert-danger" role="alert" style="display: none;"></div>
+                <div id="sceneList">
+                    
+                </div>
+                
+            </div>
+            <div class="col-md">
+            </div>
+        </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="shs.js"></script>
+    <script type="text/javascript">
+        function connectMyBridge(){
+            var bridgeIp = $('#ip').val();
+            shs.init(bridgeIp,'shs_scenes.json').then(function(result){
+                var container = document.createElement('div');
+                for (var i = 0; i < result.collection_scenes.length; i++) {
+                    var scene = result.collection_scenes[i];
+                    var sceneUploadButton = '<div><button id="up_' + scene + '" onclick="uploadScene(\'' + scene + '\')" type="button" class="btn btn-primary">Upload ' + scene + '</button></div>';
+                    container.innerHTML = sceneUploadButton;
+                    document.getElementById('sceneList').appendChild(container.firstChild);
+                }
+                document.getElementById('connectSection').style.display = 'none';
+                document.getElementById('uploadSection').style.display = 'block';
+            }).catch(function(error){
+                console.log(error)
+                $('#alert').text(error);
+                $('#alert').show();
+                setTimeout(function(){$('#alert').hide();}, 5000);
+            });
+        }
+
+        function uploadScene(s){
+            var selectElement = document.getElementsByTagName('select')[0]
+
+            var l = [].reduce.call(selectElement.options, function(result, option) {
+                if (option.selected) {
+                    result.push(option.value);
+                }
+                return result;
+            }, []);
+
+            shs.load(s, l).then(function(result){
+                var scene = result.loadedScene;
+                var sceneButton = document.getElementById('up_' + scene);
+                sceneButton.innerHTML = 'Play ' + scene;
+                sceneButton.setAttribute('onclick', 'playScene("' + scene + '")');
+                var container = document.createElement('div');
+                var sceneRemoveButton = '<button id="rem_' + scene + '" onclick="removeScene(\'' + scene + '\')" type="button" class="btn btn-secondary">Remove ' + scene + '</button>';
+                container.innerHTML = sceneRemoveButton;
+                document.getElementById('sceneList').appendChild(container.firstChild);
+            }).catch(function(error){
+                console.log(error)
+            });
+        }
+
+        function playScene(s){
+            shs.play(s).then(function(result){
+                var scene = result.loadedScene;
+                var sceneButton = document.getElementById('up_' + scene);
+                sceneButton.innerHTML = 'Stop ' + scene;
+                sceneButton.setAttribute('onclick', 'stopScene()');
+            }).catch(function(error){
+                console.log(error);
+            });
+        }
+
+        function stopScene(){
+            shs.stop().then(function(result){
+                var scene = result.loadedScene;
+                var sceneButton = document.getElementById('up_' + scene);
+                sceneButton.innerHTML = 'Play ' + scene;
+                sceneButton.setAttribute('onclick', 'playScene("' + scene + '")');
+            }).catch(function(error){
+                console.log(error)
+            });
+        }
+
+        function removeScene(s){
+            shs.remove(s).then(function(result){
+                var scene = result.removedScene;
+                var sceneButton = document.getElementById('up_' + scene);
+                sceneButton.innerHTML = 'Upload ' + scene;
+                sceneButton.setAttribute('onclick', 'uploadScene(\'' + scene + '\')');
+                document.getElementById('rem_' + scene).style.display = 'none';
+            }).catch(function(error){
+                console.log(error)
+            });
+        }
+    </script>
+  </body>
+</html>

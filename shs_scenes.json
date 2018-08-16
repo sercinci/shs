@@ -1,0 +1,230 @@
+{
+    "candle": [
+        {
+            "scene": {
+                "name":"candle_1", "lights":[], "recycle":true, "transitiontime":10
+            },
+            "light": {
+                "on":true, "bri": 60, "hue": 8336, "sat": 192
+            },
+            "rule": {
+                "name":"candle_1",
+                "conditions":[
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"eq","value":"1"
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"ddx","value":"PT00:00:01" 
+                    }
+                ],
+                "actions":[  
+                    {
+                        "address":"/groups/_shs_group/action","method":"PUT", "body":{"scene":"_shs_scene", "transitiontime":40}
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state","method":"PUT", "body":{"status":2}
+                    }
+                ]
+            },
+            "trigger": 1
+        },
+        {
+            "scene": {
+                "name":"candle_2", "lights":[], "recycle":true, "transitiontime":10
+            },
+            "light": {
+                "on":true, "bri": 60, "hue": 7304, "sat": 206
+            },
+            "rule": {
+                "name":"candle_2",
+                "conditions":[
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"eq","value":"2"
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"ddx","value":"PT00:00:02" 
+                    }
+                ],
+                "actions":[  
+                    {
+                        "address":"/groups/_shs_group/action","method":"PUT", "body":{"scene":"_shs_scene", "transitiontime":40}
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state","method":"PUT", "body":{"status":3}
+                    }
+                ]
+            },
+            "trigger": 2
+        },
+        {
+            "scene": {
+                "name":"candle_3", "lights":[], "recycle":true, "transitiontime":10
+            },
+            "light": {
+                "on":true, "bri": 120, "hue": 7681, "sat": 248
+            },
+            "rule": {
+                "name":"candle_3",
+                "conditions":[
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"eq","value":"3"
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"ddx","value":"PT00:00:01" 
+                    }
+                ],
+                "actions":[  
+                    {
+                        "address":"/groups/_shs_group/action","method":"PUT", "body":{"scene":"_shs_scene", "transitiontime":40}
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state","method":"PUT", "body":{"status":1}
+                    }
+                ]
+            },
+            "trigger": 3
+        }
+    ],
+    "storm": [
+        {
+            "scene": {
+                "name":"storm_1", "lights":[], "recycle":true, "transitiontime":40
+            },
+            "light": {
+                "on":true, "bri": 3, "xy": [0.154, 0.0806], "sat": 254
+            },
+            "rule": {
+                "name":"storm_1",
+                "conditions":[
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"eq","value":"4"
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"ddx","value":"PT00:00:00" 
+                    }
+                ],
+                "actions":[  
+                    {
+                        "address":"/groups/_shs_group/action","method":"PUT", "body":{"scene":"_shs_scene", "transitiontime":40}
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state","method":"PUT", "body":{"status":5}
+                    }
+                ]
+            },
+            "trigger": 4
+        },
+        {
+            "scene": {
+                "name":"storm_2", "lights":[], "recycle":true, "transitiontime":40
+            },
+            "light": {
+                "on":true, "bri": 3, "xy": [0.1601, 0.148], "sat": 249
+            },
+            "rule": {
+                "name":"storm_2",
+                "conditions":[
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"eq","value":"5"
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"ddx","value":"PT00:00:04" 
+                    }
+                ],
+                "actions":[  
+                    {
+                        "address":"/groups/_shs_group/action","method":"PUT", "body":{"scene":"_shs_scene", "transitiontime":40}
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state","method":"PUT", "body":{"status":6}
+                    }
+                ]
+            },
+            "trigger": 5
+        },
+        {
+            "scene": {
+                "name":"storm_3", "lights":[], "recycle":true, "transitiontime":0
+            },
+            "light": {
+                "on":true, "bri": 254, "xy": [0.3207, 0.3307], "sat": 68
+            },
+            "rule": {
+                "name":"storm_3",
+                "conditions":[
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"eq","value":"6"
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"ddx","value":"PT00:00:04" 
+                    }
+                ],
+                "actions":[  
+                    {
+                        "address":"/groups/_shs_group/action","method":"PUT", "body":{"scene":"_shs_scene", "transitiontime":0}
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state","method":"PUT", "body":{"status":7}
+                    }
+                ]
+            },
+            "trigger": 6
+        },
+        {
+            "scene": {
+                "name":"storm_4", "lights":[], "recycle":true, "transitiontime":1
+            },
+            "light": {
+                "on":true, "bri": 3, "xy": [0.154, 0.0806], "sat": 254
+            },
+            "rule": {
+                "name":"storm_4",
+                "conditions":[
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"eq","value":"7"
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"ddx","value":"PT00:00:00" 
+                    }
+                ],
+                "actions":[  
+                    {
+                        "address":"/groups/_shs_group/action","method":"PUT", "body":{"scene":"_shs_scene", "transitiontime":1}
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state","method":"PUT", "body":{"status":8}
+                    }
+                ]
+            },
+            "trigger": 7
+        },
+        {
+            "scene": {
+                "name":"storm_5", "lights":[], "recycle":true, "transitiontime":0
+            },
+            "light": {
+                "on":true, "bri": 254, "xy": [0.3207, 0.3307], "sat": 68
+            },
+            "rule": {
+                "name":"storm_5",
+                "conditions":[
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"eq","value":"8"
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state/status","operator":"ddx","value":"PT00:00:01" 
+                    }
+                ],
+                "actions":[  
+                    {
+                        "address":"/groups/_shs_group/action","method":"PUT", "body":{"scene":"_shs_scene", "transitiontime":0}
+                    },
+                    {
+                        "address":"/sensors/_shs_sensor/state","method":"PUT", "body":{"status":4}
+                    }
+                ]
+            },
+            "trigger": 8
+        }
+    ]
+}
